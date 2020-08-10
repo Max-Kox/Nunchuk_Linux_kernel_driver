@@ -1,0 +1,56 @@
+From ae235f3bb620330110a6d89cf40a2ccbc671925b Mon Sep 17 00:00:00 2001
+From: Max Kokhan <max.kokhan.94@gmail.com>
+Date: Sat, 30 May 2020 20:38:44 +0300
+Subject: [PATCH] Lab 2 enable i2c1 in custom DTS and add nunchuk node
+
+Signed-off-by: Max Kokhan <max.kokhan.94@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                   |  1 +
+ arch/arm/boot/dts/am335x-customboneblack.dts | 23 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 arch/arm/boot/dts/am335x-customboneblack.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index d6546d2676b9..c40ecc8b2873 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -762,6 +762,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
+ 	am335x-base0033.dtb \
+ 	am335x-bone.dtb \
+ 	am335x-boneblack.dtb \
++	am335x-customboneblack.dtb \
+ 	am335x-boneblack-wireless.dtb \
+ 	am335x-boneblue.dtb \
+ 	am335x-bonegreen.dtb \
+diff --git a/arch/arm/boot/dts/am335x-customboneblack.dts b/arch/arm/boot/dts/am335x-customboneblack.dts
+new file mode 100644
+index 000000000000..cb9d870e7f84
+--- /dev/null
++++ b/arch/arm/boot/dts/am335x-customboneblack.dts
+@@ -0,0 +1,23 @@
++#include "am335x-boneblack.dts"
++
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c1_pins>;
++
++	status = "okay";
++	clock-frequency = <100000>;
++
++	nunchuk: nunchuk@52 {
++		compatible = "nintendo,nunchuk";
++		reg = <0x52>;
++	};
++};
++
++&am33xx_pinmux {
++	i2c1_pins: pinmux_i2c2_pins {
++		pinctrl-single,pins = <
++			AM33XX_PADCONF(AM335X_PIN_SPI0_D1, PIN_INPUT_PULLUP, MUX_MODE2)
++			AM33XX_PADCONF(AM335X_PIN_SPI0_CS0, PIN_INPUT_PULLUP, MUX_MODE2)
++		>;
++	};
++};
+-- 
+2.17.1
+
